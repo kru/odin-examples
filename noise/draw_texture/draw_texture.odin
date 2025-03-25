@@ -11,7 +11,7 @@ import "core:mem"
 import "vendor:glfw"
 import gl "vendor:OpenGL"
 
-WIDTH :: 800
+WIDTH :: 400
 HEIGHT :: 400
 TITLE :: cstring("Open Simplex 2 Texture!")
 
@@ -216,7 +216,7 @@ main :: proc() {
 	gl.VertexAttribPointer(1, 2, gl.FLOAT, false, 4 * size_of(f32), size_of(f32) * 2)
 
 	gl.BufferData(gl.ARRAY_BUFFER, len(vertices) * size_of(f32), raw_data(vertices[:]), gl.STATIC_DRAW)
-	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, len(indices) * size_of(f32), raw_data(indices[:]), gl.STATIC_DRAW)
+	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, len(indices) * size_of(u32), raw_data(indices[:]), gl.STATIC_DRAW)
 
 	program_id: u32; ok: bool
 	if program_id, ok = gl.load_shaders("./shader.vert", "./shader.frag"); !ok {
@@ -251,8 +251,7 @@ main :: proc() {
 		glfw.PollEvents()
 
 		if glfw.GetKey(window_handle, glfw.KEY_COMMA) == glfw.PRESS && 
-			glfw.GetKey(window_handle, glfw.KEY_LEFT_SHIFT) == glfw.PRESS 
-		{
+			glfw.GetKey(window_handle, glfw.KEY_LEFT_SHIFT) == glfw.PRESS {
 			adjust_noise.frequency -= 5.0
 			adjust_noise.frequency = glsl.clamp(adjust_noise.frequency, 1, 9000)
 
