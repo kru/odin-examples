@@ -9,3 +9,4 @@
 # Ignore temporary files created as part of compilation
 *.hpp
 *.o
+*.bin
