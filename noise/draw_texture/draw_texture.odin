@@ -146,6 +146,9 @@ main :: proc() {
 		return
 	}
 
+	fmt.printfln("GLFW Version: %s", glfw.GetVersionString())
+	fmt.printfln("OpenGL Version: %d", gl.VERSION)
+
 	glfw.SetErrorCallback(proc "c" (error: c.int, description: cstring) {
 		context = runtime.default_context()
 		fmt.println(description)
@@ -174,8 +177,8 @@ main :: proc() {
 	// Disable Vsync
 	glfw.SwapInterval(0)
 
-	vao: u32
-	vbo: u32
+	vao: u32 // Vertex array object
+	vbo: u32 // Vertex buffer object: to manage vertex data in OpenGL pipeline
 	ebo: u32
 
 	gl.GenVertexArrays(1, &vao)
@@ -225,6 +228,8 @@ main :: proc() {
 	}
 	defer gl.DeleteProgram(program_id)
 
+
+	fmt.printfln("program_id %d", program_id)
 	texture_id: u32
 
 	gl.GenTextures(1, &texture_id)
