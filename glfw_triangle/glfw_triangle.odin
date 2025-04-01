@@ -11,8 +11,8 @@ WIDTH :: 1600
 HEIGHT :: 900
 TITLE :: "OpenGL Triangle"
 
-GL_MAJOR_VERSION :: 3
-GL_MINOR_VERSION :: 3
+GL_MAJOR_VERSION :: 4
+GL_MINOR_VERSION :: 1
 
 Vertices :: [9]f32
 
@@ -32,6 +32,9 @@ main :: proc() {
 		return
 	}
 
+	glfw.WindowHint(glfw.CONTEXT_VERSION_MAJOR, GL_MAJOR_VERSION)
+	glfw.WindowHint(glfw.CONTEXT_VERSION_MINOR, GL_MINOR_VERSION)
+	glfw.WindowHint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
 	window_handle := glfw.CreateWindow(WIDTH, HEIGHT, TITLE, nil, nil)
 
 	defer glfw.Terminate()
@@ -47,6 +50,8 @@ main :: proc() {
 	// Load OpenGL function pointer with the specified OpenGL major and minor version
 	gl.load_up_to(GL_MAJOR_VERSION, GL_MINOR_VERSION, glfw.gl_set_proc_address)
 
+	fmt.println("OpenGL version:", gl.GetString(gl.VERSION))
+	fmt.println("GLFW version:", glfw.GetVersionString())
 	// NOTE: we can change compile vertex shader and fragment shader using gl.load_shaders()
 	// because we are learning lets make sense the process
 

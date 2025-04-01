@@ -15,8 +15,8 @@ WIDTH :: 400
 HEIGHT :: 400
 TITLE :: cstring("Open Simplex 2 Texture!")
 
-GL_MAJOR_VERSION :: 3
-GL_MINOR_VERSION :: 3
+GL_MAJOR_VERSION :: 4
+GL_MINOR_VERSION :: 1
 
 Adjust_Noise :: struct {
 	seed:      i64,
@@ -147,7 +147,7 @@ main :: proc() {
 	}
 
 	fmt.printfln("GLFW Version: %s", glfw.GetVersionString())
-	fmt.printfln("OpenGL Version: %d", gl.VERSION)
+	fmt.printfln("OpenGL Version: %d", gl.GetString(gl.VERSION))
 
 	glfw.SetErrorCallback(proc "c" (error: c.int, description: cstring) {
 		context = runtime.default_context()
