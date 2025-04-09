@@ -2,6 +2,7 @@ package glfw_triangle
 
 import "core:fmt"
 import "core:os"
+import "core:math"
 
 import gl "vendor:OpenGL"
 import "vendor:glfw"
@@ -14,13 +15,14 @@ TITLE :: "OpenGL Triangle"
 GL_MAJOR_VERSION :: 4
 GL_MINOR_VERSION :: 1
 
-Vertices :: [9]f32
+Vertices :: [18]f32
 
 create_vertices :: proc() -> Vertices {
 	vertices: Vertices = {
-		-0.5, -0.5, 0.0, // left
-		 0.5, -0.5, 0.0, // top
-		 0.0,  0.5, 0.0, // right
+		// positions		// colors
+		-0.5, -0.5, 0.0,	1.0, 0.0, 0.0,	// bottom left
+		 0.5, -0.5, 0.0,	0.0, 1.0, 0.0,	// bottom right
+		 0.0,  0.5, 0.0,	0.0, 0.0, 1.0,	// top
 	}
 
 	return vertices
@@ -125,8 +127,14 @@ main :: proc() {
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
 
 	gl.BufferData(gl.ARRAY_BUFFER, size_of(vertices), raw_data(vertices[:]), gl.STATIC_DRAW)
-	gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), 0)
+
+	// position attribute
+	gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 6 * size_of(f32), 0)
 	gl.EnableVertexAttribArray(0)
+
+	// color attribute
+	gl.VertexAttribPointer(1, 3, gl.FLOAT, gl.FALSE, 6 * size_of(f32), (3* size_of(f32)))
+	gl.EnableVertexAttribArray(1)
 
 	// note that this is allowed, the call to gl.VertexAttribPointer registered vbo
 	// as the vertex attribute's bound vbo so afterwards we can safely unbind
@@ -144,13 +152,24 @@ main :: proc() {
 		// process all incoming events like keyboard press
 		glfw.PollEvents()
 
+		// clear the colorbuffer
 		gl.ClearColor(0.2, 0.3, 0.3, 1.0)
 		gl.Clear(gl.COLOR_BUFFER_BIT)
 
+		// activate the shader
 		gl.UseProgram(program_id)
+
+		// update the uniform color
+		time_value := glfw.GetTime()
+		green_value := math.sin(time_value) / 2.0 + 0.5
+		vertex_color_location := gl.GetUniformLocation(program_id, "ourColor")
+		gl.Uniform4f(vertex_color_location, 0.0, f32(green_value), 0.0, 1.0)
+
+		// now render the triangle
 		gl.BindVertexArray(vao)
 		gl.DrawArrays(gl.TRIANGLES, 0, 3)
 
+		// swap buffers and poll IO events
 		glfw.SwapBuffers(window_handle)
 	}
 }
