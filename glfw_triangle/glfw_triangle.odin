@@ -140,7 +140,8 @@ main :: proc() {
 	// as the vertex attribute's bound vbo so afterwards we can safely unbind
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 
-	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens.
+	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, 
+	// but this rarely happens.
 	// VAOs requires a call to gl.BindVertexArray anyways so we generally don't unbind VAOs (nor VBOs)
 	// when it's not directly neccessary.
 	gl.BindVertexArray(0)
